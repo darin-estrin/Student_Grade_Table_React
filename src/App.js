@@ -3,7 +3,6 @@ import firebase from 'firebase';
 import Header from './components/Header';
 import AddStudent from './components/AddStudent';
 import StudentList from './components/StudentList.js'
-import './App.css';
 
 class App extends Component {
 
