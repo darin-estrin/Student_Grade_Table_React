@@ -3,10 +3,10 @@ import StudentDetails from './StudentDetails';
 
 const StudentList = (props) =>{
 
-    console.log(props);
-
     const student = props.students.map((student, index) => {
-        return <StudentDetails key={student.id} />
+        return <StudentDetails key={student.id} 
+                student={ student }
+                handleDelete={ props.handleDelete } />
     });
     
     return (

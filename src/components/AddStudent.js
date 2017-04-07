@@ -61,6 +61,8 @@ class AddStudent extends Component {
             grade: '',
             id: uuid.v1()
         });
+
+        document.getElementById('student').focus();
     }
 
     render(){
@@ -72,7 +74,7 @@ class AddStudent extends Component {
                         <span className='input-group-addon'>
                             <span className='glyphicon glyphicon-user'></span>
                         </span>
-                        <input type='text' className='form-control' name='studentName' placeholder='Student Name' value={this.state.name} onChange={(event) => this.handleChange(event.target)}/>
+                        <input type='text' className='form-control' id='student' name='studentName' placeholder='Student Name' value={this.state.name} onChange={(event) => this.handleChange(event.target)}/>
                     </div>
                     <div className="form-group input-group">
                         <span className="input-group-addon">
