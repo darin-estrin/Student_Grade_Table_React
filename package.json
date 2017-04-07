@@ -1,12 +1,15 @@
 {
   "name": "sgt_react",
   "version": "0.1.0",
-  "private": true,
   "devDependencies": {
     "react-scripts": "0.9.5"
   },
+  "author": "Darin Estrin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darin-estrin/Student_Grade_Table.git"
+  },
   "dependencies": {
-    "axios": "^0.16.0",
     "firebase": "^3.7.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
