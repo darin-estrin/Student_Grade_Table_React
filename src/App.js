@@ -21,7 +21,8 @@ class App extends Component {
     
     this.state = {
       students: [],
-      average: ''
+      average: '',
+      update: false
     }
   }
 
@@ -67,12 +68,19 @@ class App extends Component {
     this.getStudentGrades();
   }
 
+  handleGetDataClick(){
+    this.setState({
+      update: true
+    });
+  }
+
   render() {
     return (
       <div className="App container">
         <Header average={this.state.average} />
-        <AddStudent addStudent={(student) => this.addStudentToDatabase(student)} />
-        <StudentList students={ this.state.students } handleDelete={(e) => this.deleteStudent(e)} />
+        <AddStudent addStudent={(student) => this.addStudentToDatabase(student)} getDataClicked={() => this.handleGetDataClick()}/>
+        <StudentList students={ this.state.students } handleDelete={(e) => this.deleteStudent(e)}
+        getDataClicked={this.state.update} />
       </div>
     );
   }

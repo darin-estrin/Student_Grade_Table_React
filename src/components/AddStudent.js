@@ -9,7 +9,8 @@ class AddStudent extends Component {
             id: uuid.v1(),
             name: '',
             course: '',
-            grade: ''
+            grade: '',
+            updateClicked: false
         }
     }
 
@@ -34,7 +35,8 @@ class AddStudent extends Component {
         this.setState({
             name: '',
             course: '',
-            grade: ''
+            grade: '',
+            updateClicked: false
         });
     }
 
@@ -64,6 +66,21 @@ class AddStudent extends Component {
 
         document.getElementById('student').focus();
     }
+    
+    getDataButtonClicked(e){
+        this.props.getDataClicked();
+        this.setState({
+            updateClicked: true
+        });
+    }
+
+    renderDataButton(){
+        if(!this.state.updateClicked){
+            return <button type='button' className='btn btn-info' onClick={this.getDataButtonClicked.bind(this)}>Get Data</button>
+        } else {
+            return <button type='button' className='btn btn-primary' onClick={this.getDataButtonClicked.bind(this)}>Update Student</button>
+        }
+    }
 
     render(){
         return(
@@ -91,6 +108,7 @@ class AddStudent extends Component {
                     </div>
                     <button type="submit" className="btn btn-success">Add</button>
                     <button type="button" className="btn btn-default" onClick={this.clearForm.bind(this)}>Cancel</button>
+                    {this.renderDataButton()}
                 </form>
             </div>
         )
