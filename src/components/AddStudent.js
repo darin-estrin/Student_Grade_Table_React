@@ -14,6 +14,16 @@ class AddStudent extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log(this.state.updateClicked)
+        if(nextProps.setStudent.name  && this.state.updateClicked){
+            this.setStudentState(nextProps.setStudent);
+        } else {
+            this.clearForm();
+            console.log(this.state)
+        }
+    }
+
     handleChange(event){
         let value = event.value;
         if(event.name === 'studentName'){
@@ -36,7 +46,7 @@ class AddStudent extends Component {
             name: '',
             course: '',
             grade: '',
-            updateClicked: false
+            id: uuid.v1()
         });
     }
 
@@ -74,41 +84,70 @@ class AddStudent extends Component {
         });
     }
 
+    cancelUpdate(){
+        this.props.getDataClicked();
+        this.setState({
+            updateClicked: false
+        });
+        this.componentWillReceiveProps(this.props);
+    }
+
     renderDataButton(){
         if(!this.state.updateClicked){
-            return <button type='button' className='btn btn-info' onClick={this.getDataButtonClicked.bind(this)}>Get Data</button>
+            return <button type='button' className='btn btn-info'
+            onClick={ this.getDataButtonClicked.bind(this) }>Get Data</button>
         } else {
-            return <button type='button' className='btn btn-primary' onClick={this.getDataButtonClicked.bind(this)}>Update Student</button>
+            return <button type='button' className='btn btn-primary'
+            onClick={ this.getDataButtonClicked.bind(this) }>Update Student</button>
         }
+    }
+
+    renderCancelButton(){
+        if(!this.state.updateClicked){
+            return <button type="button" className="btn btn-default"
+            onClick={ this.clearForm.bind(this) }>Cancel</button>
+        } else {
+            return <button type='button' className='btn btn-default'
+            onClick={ this.cancelUpdate.bind(this) }>Cancel</button>
+        }
+    }
+
+    setStudentState(student) {
+       this.setState({
+           name: student.name,
+           course: student.course,
+           grade: student.grade,
+           id: student.id 
+       });
     }
 
     render(){
         return(
             <div className="form-group student-add-form pull-right col-sm-3 col-xs-12">
-                <form onSubmit={this.handleAddClick.bind(this)}>
+                <form onSubmit={ this.handleAddClick.bind(this) } >
                     <h4>Add Student</h4>
                     <div className='form-group input-group'>
                         <span className='input-group-addon'>
                             <span className='glyphicon glyphicon-user'></span>
                         </span>
-                        <input type='text' className='form-control' id='student' name='studentName' placeholder='Student Name' value={this.state.name} onChange={(event) => this.handleChange(event.target)}/>
+                        <input type='text' className='form-control' id='student' name='studentName' placeholder='Student Name' value={ this.state.name } onChange={ (event) => this.handleChange(event.target) } />
                     </div>
                     <div className="form-group input-group">
                         <span className="input-group-addon">
                             <span className="glyphicon glyphicon-list-alt"></span>
                         </span>
-                        <input type="text" className="form-control" name="course" placeholder="Student Course" value={this.state.course} onChange={(event) => this.handleChange(event.target)} />
+                        <input type="text" className="form-control" name="course" placeholder="Student Course" value={ this.state.course } onChange={ (event) => this.handleChange(event.target) } />
                     </div>
                     <div className="form-group input-group">
                         <span className="input-group-addon">
                             <span className="glyphicon glyphicon-education"></span>
                         </span>
                         <input type="text" className="form-control" name="studentGrade"
-                    placeholder="Student Grade" value={this.state.grade} onChange={(event) => this.handleChange(event.target)} />
+                    placeholder="Student Grade" value={ this.state.grade } onChange={ (event) => this.handleChange(event.target) } />
                     </div>
                     <button type="submit" className="btn btn-success">Add</button>
-                    <button type="button" className="btn btn-default" onClick={this.clearForm.bind(this)}>Cancel</button>
-                    {this.renderDataButton()}
+                    { this.renderCancelButton() }
+                    { this.renderDataButton() }
                 </form>
             </div>
         )

@@ -4,9 +4,9 @@ import StudentDetails from './StudentDetails';
 const StudentList = (props) =>{
 
     const student = props.students.map((student, index) => {
-        return <StudentDetails key={student.id} 
-                student={ student } getDataClicked={props.getDataClicked}
-                handleDelete={ props.handleDelete } />
+        return <StudentDetails key={ student.id } 
+                student={ student } getDataClicked={ props.getDataClicked }
+                handleDelete={ props.handleDelete }  handleUpdate={ props.handleUpdate } />
     });
     
     return (
