@@ -21,12 +21,32 @@ class App extends Component {
     
     this.state = {
       students: [],
-      average: ''
+      average: '',
+      update: false,
+      activeStudent: {}
     }
   }
 
   componentDidMount(){
     this.getStudentGrades();
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    if(this.state.update && this.state.activeStudent.name){
+      this.getStudentGrades();
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState){
+    if(!prevState.update && prevState.activeStudent.name){
+      this.setState({
+        activeStudent: {}
+      });
+    }
   }
 
   getStudentGrades(){
@@ -67,12 +87,39 @@ class App extends Component {
     this.getStudentGrades();
   }
 
+  handleGetDataClick(){
+    if(!this.state.update){
+      this.setState({
+        update: true
+      });
+    } else {
+      this.setState({
+        update: false
+      });
+    }
+  }
+
+  updateDataClicked(e){
+    this.setState({
+      activeStudent: {
+        name: e.student.name,
+        course: e.student.course,
+        id: e.student.id,
+        grade: e.student.grade
+      }
+    })
+  }
+
   render() {
     return (
       <div className="App container">
-        <Header average={this.state.average} />
-        <AddStudent addStudent={(student) => this.addStudentToDatabase(student)} />
-        <StudentList students={ this.state.students } handleDelete={(e) => this.deleteStudent(e)} />
+        <Header average={ this.state.average } />
+        <AddStudent addStudent={ (student) => this.addStudentToDatabase(student) }
+        getDataClicked={ () => this.handleGetDataClick() }
+        setStudent={ this.state.activeStudent } />
+        <StudentList students={ this.state.students }
+        handleDelete={ (student) => this.deleteStudent(student) }
+        getDataClicked={ this.state.update } handleUpdate={ (e) => this.updateDataClicked(e) } />
       </div>
     );
   }
