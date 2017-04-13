@@ -33,7 +33,6 @@ class AddStudent extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
-        console.log(nextState);
         if(nextState.name && !nextState.updateClicked  && !this.state.newStudent){
             this.clearForm();
         } else {
@@ -70,6 +69,10 @@ class AddStudent extends Component {
 
     handleAddClick(e){
         e.preventDefault();
+        if(!this.state.newStudent){
+            this.updateStudent();
+            return;
+        }
         if(this.state.grade < 0 || this.state.grade > 100 || this.state.grade === ''){
             alert('please enter a grade between 0 and 100');
             return;
