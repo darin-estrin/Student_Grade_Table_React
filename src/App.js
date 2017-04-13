@@ -31,6 +31,24 @@ class App extends Component {
     this.getStudentGrades();
   }
 
+  shouldComponentUpdate(nextProps, nextState){
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    if(this.state.update && this.state.activeStudent.name){
+      this.getStudentGrades();
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState){
+    if(!prevState.update && prevState.activeStudent.name){
+      this.setState({
+        activeStudent: {}
+      });
+    }
+  }
+
   getStudentGrades(){
     var self = this;
     var students = []
@@ -100,7 +118,7 @@ class App extends Component {
         getDataClicked={ () => this.handleGetDataClick() }
         setStudent={ this.state.activeStudent } />
         <StudentList students={ this.state.students }
-        handleDelete={ (e) => this.deleteStudent(e) }
+        handleDelete={ (student) => this.deleteStudent(student) }
         getDataClicked={ this.state.update } handleUpdate={ (e) => this.updateDataClicked(e) } />
       </div>
     );

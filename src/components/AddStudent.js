@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import firebase from 'firebase';
 
 class AddStudent extends Component {
     constructor(props) {
@@ -10,17 +11,24 @@ class AddStudent extends Component {
             name: '',
             course: '',
             grade: '',
-            updateClicked: false
+            updateClicked: false,
         }
     }
 
     componentWillReceiveProps(nextProps){
-        console.log(this.state.updateClicked)
         if(nextProps.setStudent.name  && this.state.updateClicked){
             this.setStudentState(nextProps.setStudent);
-        } else {
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        return true;
+    }
+
+    componentWillUpdate(nextProps, nextState){
+        console.log('hi')
+        if(nextState.name && !nextState.updateClicked){
             this.clearForm();
-            console.log(this.state)
         }
     }
 
@@ -89,17 +97,23 @@ class AddStudent extends Component {
         this.setState({
             updateClicked: false
         });
-        this.componentWillReceiveProps(this.props);
     }
 
     renderDataButton(){
         if(!this.state.updateClicked){
-            return <button type='button' className='btn btn-info'
+            return <button type='button' className='btn btn-primary'
             onClick={ this.getDataButtonClicked.bind(this) }>Get Data</button>
         } else {
             return <button type='button' className='btn btn-primary'
-            onClick={ this.getDataButtonClicked.bind(this) }>Update Student</button>
+            onClick={ this.updateStudent.bind(this) }>Update Student</button>
         }
+    }
+
+    updateStudent(){
+        console.log(this.state);
+        firebase.database().ref(`Students/${this.state.id}`).update(this.state);
+        this.clearForm();
+        this.cancelUpdate();
     }
 
     renderCancelButton(){
