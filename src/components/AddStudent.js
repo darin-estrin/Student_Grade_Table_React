@@ -11,7 +11,8 @@ class AddStudent extends Component {
             name: '',
             course: '',
             grade: '',
-            updateClicked: false,
+            newStudent: true,
+            updateClicked: false
         }
     }
 
@@ -22,13 +23,21 @@ class AddStudent extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return true;
+        if(this.state.activeStudent !== nextState.activeStudent){
+            return true;
+        } else if(this.state !== nextState){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     componentWillUpdate(nextProps, nextState){
-        console.log('hi')
-        if(nextState.name && !nextState.updateClicked){
+        console.log(nextState);
+        if(nextState.name && !nextState.updateClicked  && !this.state.newStudent){
             this.clearForm();
+        } else {
+            return nextState;
         }
     }
 
@@ -54,7 +63,8 @@ class AddStudent extends Component {
             name: '',
             course: '',
             grade: '',
-            id: uuid.v1()
+            id: uuid.v1(),
+            newStudent: true
         });
     }
 
@@ -102,10 +112,10 @@ class AddStudent extends Component {
     renderDataButton(){
         if(!this.state.updateClicked){
             return <button type='button' className='btn btn-primary'
-            onClick={ this.getDataButtonClicked.bind(this) }>Get Data</button>
+            onClick={ this.getDataButtonClicked.bind(this) }>Update Students</button>
         } else {
             return <button type='button' className='btn btn-primary'
-            onClick={ this.updateStudent.bind(this) }>Update Student</button>
+            onClick={ this.updateStudent.bind(this) }>Confirm Update</button>
         }
     }
 
@@ -131,7 +141,8 @@ class AddStudent extends Component {
            name: student.name,
            course: student.course,
            grade: student.grade,
-           id: student.id 
+           id: student.id,
+           newStudent: false
        });
     }
 

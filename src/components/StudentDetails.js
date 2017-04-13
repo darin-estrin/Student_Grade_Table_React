@@ -8,7 +8,7 @@ const StudentDetails = (props) => {
             onClick={ (e) => props.handleDelete(e) } >Delete</button>
         } else {
             return <button className='btn btn-warning'
-            onClick={ (e) => props.handleUpdate(props) } >Update Data</button>
+            onClick={ (e) => props.handleUpdate(props) } >Update Grade</button>
         }
     }
 
