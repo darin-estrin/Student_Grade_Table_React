@@ -12,7 +12,8 @@ class AddStudent extends Component {
             course: '',
             grade: '',
             newStudent: true,
-            updateClicked: false
+            updateClicked: false,
+            error: ''
         }
     }
 
@@ -63,7 +64,8 @@ class AddStudent extends Component {
             course: '',
             grade: '',
             id: uuid.v1(),
-            newStudent: true
+            newStudent: true,
+            error: ''
         });
     }
 
@@ -73,16 +75,16 @@ class AddStudent extends Component {
             this.updateStudent();
             return;
         }
-        if(this.state.grade < 0 || this.state.grade > 100 || this.state.grade === ''){
-            alert('please enter a grade between 0 and 100');
-            return;
-        }
         if(this.state.name === ''){
-            alert('please enter a name');
+            this.setState({ error: 'Please enter a name' });
             return;
         }
         if(this.state.course === ''){
-            alert('please enter a course');
+            this.setState({ error: 'Please enter a course' });
+            return;
+        }
+        if(this.state.grade < 0 || this.state.grade > 100 || this.state.grade === ''){
+            this.setState({ error: 'Please enter a grade between 0 and 100' });
             return;
         }
 
@@ -92,7 +94,8 @@ class AddStudent extends Component {
             name: '',
             course: '',
             grade: '',
-            id: uuid.v1()
+            id: uuid.v1(),
+            error: ''
         });
 
         document.getElementById('student').focus();
@@ -101,14 +104,16 @@ class AddStudent extends Component {
     getDataButtonClicked(e){
         this.props.getDataClicked();
         this.setState({
-            updateClicked: true
+            updateClicked: true,
+            error: ''
         });
     }
 
     cancelUpdate(){
         this.props.getDataClicked();
         this.setState({
-            updateClicked: false
+            updateClicked: false,
+            error: ''
         });
     }
 
@@ -145,8 +150,21 @@ class AddStudent extends Component {
            course: student.course,
            grade: student.grade,
            id: student.id,
-           newStudent: false
+           newStudent: false,
+           error: ''
        });
+    }
+
+    renderError() {
+        if (this.state.error) {
+            return (
+            <div className='alert alert-danger'>
+                <strong>{this.state.error}</strong>
+            </div>
+            );
+        } else {
+            return <div></div>
+        }
     }
 
     render(){
@@ -177,6 +195,7 @@ class AddStudent extends Component {
                     { this.renderCancelButton() }
                     { this.renderDataButton() }
                 </form>
+                {this.renderError()}
             </div>
         )
     }
