@@ -158,9 +158,9 @@ class AddStudent extends Component {
     renderError() {
         if (this.state.error) {
             return (
-            <div className='alert alert-danger'>
-                <strong>{this.state.error}</strong>
-            </div>
+                <div className='alert alert-danger'>
+                    <strong>{this.state.error}</strong>
+                </div>
             );
         } else {
             return <div></div>
@@ -191,11 +191,11 @@ class AddStudent extends Component {
                         <input type="text" className="form-control" name="studentGrade"
                     placeholder="Student Grade" value={ this.state.grade } onChange={ (event) => this.handleChange(event.target) } />
                     </div>
+                    {this.renderError()}
                     <button type="submit" className="btn btn-success">Add</button>
                     { this.renderCancelButton() }
                     { this.renderDataButton() }
                 </form>
-                {this.renderError()}
             </div>
         )
     }
