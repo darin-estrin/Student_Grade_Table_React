@@ -5,7 +5,7 @@ app.use(express.static('build'));
 app.set('views', './build');
 
 app.get('*', function (req, res) {
-    res.sendfile(`${process.cwd()}/build/index.html`);
+    res.sendFile(`${process.cwd()}/build/index.html`);
 });
 
 app.listen(process.env.PORT || 8080);
