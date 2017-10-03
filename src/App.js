@@ -71,13 +71,13 @@ class App extends Component {
   }
 
   addStudentToDatabase(student){
-   firebase.database().ref(`/Students/${student.id}`).set(student);
-   const { students } = this.state;
+    firebase.database().ref(`/Students/${student.id}`).set(student);
+    const { students } = this.state;
 
-   this.setState({
-     students: [...students, student]
-   })
-   this.getStudentGrades();
+    this.setState({
+      students: [...students, student]
+    })
+    this.getStudentGrades();
   }
 
   deleteStudent(e){
@@ -105,7 +105,8 @@ class App extends Component {
         name: e.student.name,
         course: e.student.course,
         id: e.student.id,
-        grade: e.student.grade
+        grade: e.student.grade,
+        created: e.student.created
       }
     })
   }

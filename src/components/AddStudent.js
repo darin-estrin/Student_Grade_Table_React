@@ -13,7 +13,8 @@ class AddStudent extends Component {
             grade: '',
             newStudent: true,
             updateClicked: false,
-            error: ''
+            error: '',
+            created: Date.now()
         }
     }
 
@@ -65,7 +66,8 @@ class AddStudent extends Component {
             grade: '',
             id: uuid.v1(),
             newStudent: true,
-            error: ''
+            error: '',
+            created: Date.now()
         });
     }
 
@@ -87,7 +89,6 @@ class AddStudent extends Component {
             this.setState({ error: 'Please enter a grade between 0 and 100' });
             return;
         }
-
         this.props.addStudent(this.state);
 
         this.setState({
@@ -95,7 +96,8 @@ class AddStudent extends Component {
             course: '',
             grade: '',
             id: uuid.v1(),
-            error: ''
+            error: '',
+            created: Date.now()
         });
 
         document.getElementById('student').focus();
@@ -128,7 +130,6 @@ class AddStudent extends Component {
     }
 
     updateStudent(){
-        console.log(this.state);
         firebase.database().ref(`Students/${this.state.id}`).update(this.state);
         this.clearForm();
         this.cancelUpdate();
@@ -151,7 +152,8 @@ class AddStudent extends Component {
            grade: student.grade,
            id: student.id,
            newStudent: false,
-           error: ''
+           error: '',
+           created: student.created
        });
     }
 
