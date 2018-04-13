@@ -9,24 +9,26 @@ class App extends Component {
   constructor(props){
     super(props);
     
-  var config = {
-    apiKey: "AIzaSyCwuNtpCmcu8bPGlYeFhQfHHj3AThKaSjg",
-    authDomain: "student-grade-table-d99c1.firebaseapp.com",
-    databaseURL: "https://student-grade-table-d99c1.firebaseio.com",
-    projectId: "student-grade-table-d99c1",
-    storageBucket: "student-grade-table-d99c1.appspot.com",
-    messagingSenderId: "166741700159"
+    var config = {
+      apiKey: "AIzaSyCwuNtpCmcu8bPGlYeFhQfHHj3AThKaSjg",
+      authDomain: "student-grade-table-d99c1.firebaseapp.com",
+      databaseURL: "https://student-grade-table-d99c1.firebaseio.com",
+      projectId: "student-grade-table-d99c1",
+      storageBucket: "student-grade-table-d99c1.appspot.com",
+      messagingSenderId: "166741700159"
     };
-  firebase.initializeApp(config);
-    
-    this.state = {
-      students: [],
-      average: '',
-      update: false,
-      activeStudent: {}
-    }
+
+    firebase.initializeApp(config);
+      
+      this.state = {
+        students: [],
+        average: '',
+        update: false,
+        activeStudent: {}
+      }
   }
 
+  // Life Cycle Methods
   componentDidMount(){
     this.getStudentGrades();
   }
@@ -47,6 +49,24 @@ class App extends Component {
         activeStudent: {}
       });
     }
+  }
+
+  // Custom Methods
+  addStudentToDatabase(student){
+    firebase.database().ref(`/Students/${student.id}`).set(student);
+    const { students } = this.state;
+
+    this.setState({
+      students: [...students, student]
+    })
+    this.getStudentGrades();
+  }
+
+  deleteStudent(e){
+    const studentId = e.target.parentNode.parentNode.id;
+    const deleteStudent = firebase.database().ref(`Students/${studentId}`);
+    deleteStudent.remove();
+    this.getStudentGrades();
   }
 
   getStudentGrades(){
@@ -70,23 +90,6 @@ class App extends Component {
       });
   }
 
-  addStudentToDatabase(student){
-    firebase.database().ref(`/Students/${student.id}`).set(student);
-    const { students } = this.state;
-
-    this.setState({
-      students: [...students, student]
-    })
-    this.getStudentGrades();
-  }
-
-  deleteStudent(e){
-    const studentId = e.target.parentNode.parentNode.id;
-    const deleteStudent = firebase.database().ref(`Students/${studentId}`);
-    deleteStudent.remove();
-    this.getStudentGrades();
-  }
-
   handleGetDataClick(){
     if(!this.state.update){
       this.setState({
@@ -108,19 +111,23 @@ class App extends Component {
         grade: e.student.grade,
         created: e.student.created
       }
-    })
+    });
   }
 
+  // Render Method
   render() {
     return (
       <div className="App container">
         <Header average={ this.state.average } />
-        <AddStudent addStudent={ (student) => this.addStudentToDatabase(student) }
-        getDataClicked={ () => this.handleGetDataClick() }
-        setStudent={ this.state.activeStudent } />
-        <StudentList students={ this.state.students }
-        handleDelete={ (student) => this.deleteStudent(student) }
-        getDataClicked={ this.state.update } handleUpdate={ (e) => this.updateDataClicked(e) } />
+        <AddStudent 
+          addStudent={ (student) => this.addStudentToDatabase(student) }
+          getDataClicked={ () => this.handleGetDataClick() }
+          setStudent={ this.state.activeStudent } />
+        <StudentList
+          students={ this.state.students }
+          handleDelete={ (student) => this.deleteStudent(student) }
+          handleUpdate={ (e) => this.updateDataClicked(e) }
+          getDataClicked={ this.state.update } />
       </div>
     );
   }
