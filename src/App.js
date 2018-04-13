@@ -23,7 +23,6 @@ class App extends Component {
       this.state = {
         students: [],
         average: '',
-        update: false,
         activeStudent: {}
       }
   }
@@ -33,13 +32,9 @@ class App extends Component {
     this.getStudentGrades();
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    return true;
-  }
-
-  componentWillUpdate(nextProps, nextState){
-    if(this.state.update && this.state.activeStudent.name){
-      this.getStudentGrades();
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.students.length > this.state.students.length) {
+      
     }
   }
 
@@ -59,6 +54,7 @@ class App extends Component {
     const deleteStudent = firebase.database().ref(`Students/${studentId}`);
     deleteStudent.remove();
     this.getStudentGrades();
+    this.setState({ activeStudent: false });
   }
 
   getStudentGrades(){

@@ -24,6 +24,10 @@ class AddStudent extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.setStudent === false) {
+			this.setState({ updateClicked: false });
+			this.clearForm();
+		}
 		if (this.state.activeStudent !== nextState.activeStudent) {
 			return true;
 		} else if (this.state !== nextState) {
