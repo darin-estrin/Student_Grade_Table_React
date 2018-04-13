@@ -42,14 +42,6 @@ class App extends Component {
       this.getStudentGrades();
     }
   }
-  
-  componentDidUpdate(prevProps, prevState){
-    if(!prevState.update && prevState.activeStudent.name){
-      this.setState({
-        activeStudent: {}
-      });
-    }
-  }
 
   // Custom Methods
   addStudentToDatabase(student){
@@ -58,7 +50,7 @@ class App extends Component {
 
     this.setState({
       students: [...students, student]
-    })
+    });
     this.getStudentGrades();
   }
 
@@ -82,7 +74,8 @@ class App extends Component {
           const grade = parseFloat(students[index].grade);
           index++
           average += grade;
-        })
+        });
+
         self.setState({
           students,
           average: Math.round(average / students.length)
@@ -90,19 +83,12 @@ class App extends Component {
       });
   }
 
-  handleGetDataClick(){
-    if(!this.state.update){
-      this.setState({
-        update: true
-      });
-    } else {
-      this.setState({
-        update: false
-      });
-    }
+  updatedStudentGrade() {
+    this.setState({ activeStudent: {} });
+    this.getStudentGrades();
   }
 
-  updateDataClicked(e){
+  updateStudentClicked(e){
     this.setState({
       activeStudent: {
         name: e.student.name,
@@ -121,13 +107,12 @@ class App extends Component {
         <Header average={ this.state.average } />
         <AddStudent 
           addStudent={ (student) => this.addStudentToDatabase(student) }
-          getDataClicked={ () => this.handleGetDataClick() }
+          updatedStudent={ () => this.updatedStudentGrade() }
           setStudent={ this.state.activeStudent } />
         <StudentList
           students={ this.state.students }
           handleDelete={ (student) => this.deleteStudent(student) }
-          handleUpdate={ (e) => this.updateDataClicked(e) }
-          getDataClicked={ this.state.update } />
+          handleUpdate={ (e) => this.updateStudentClicked(e) } />
       </div>
     );
   }

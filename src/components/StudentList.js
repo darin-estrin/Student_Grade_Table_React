@@ -13,7 +13,6 @@ const StudentList = (props) => {
     return <StudentDetails
       key={student.id}
       student={student}
-      getDataClicked={props.getDataClicked}
       handleDelete={props.handleDelete}
       handleUpdate={props.handleUpdate}/>
   });

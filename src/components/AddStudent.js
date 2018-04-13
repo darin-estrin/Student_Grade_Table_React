@@ -11,8 +11,6 @@ class AddStudent extends Component {
 			name: '',
 			course: '',
 			grade: '',
-			newStudent: true,
-			updateClicked: false,
 			error: '',
 			created: Date.now()
 		}
@@ -20,7 +18,7 @@ class AddStudent extends Component {
 
 	// Life Cycle Methods
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.setStudent.name && this.state.updateClicked) {
+		if (nextProps.setStudent.name) {
 			this.setStudentState(nextProps.setStudent);
 		}
 	}
@@ -35,34 +33,28 @@ class AddStudent extends Component {
 		}
 	}
 
-	componentWillUpdate(nextProps, nextState) {
-		if (nextState.name && !nextState.updateClicked && !this.state.newStudent) {
-			this.clearForm();
-		} else {
-			return nextState;
-		}
-	}
-
 	// Custom methods
-
 	clearForm() {
 		this.setState({
 			name: '',
 			course: '',
 			grade: '',
 			id: uuid.v1(),
-			newStudent: true,
 			error: '',
-			created: Date.now()
+			created: Date.now(),
+			updateClicked: false
 		});
 	}
 
 	handleAddClick(e) {
 		e.preventDefault();
-		if (!this.state.newStudent) {
+		const form = e.target;
+		const buttonClicked = form.querySelector('button');
+		if (buttonClicked.innerText === 'Update') {
 			this.updateStudent();
 			return;
 		}
+		
 		if (this.state.name === '') {
 			this.setState({error: 'Please enter a name'});
 			return;
@@ -89,6 +81,10 @@ class AddStudent extends Component {
 		document.getElementById('student').focus();
 	}
 
+	handleCancelClicked(e) {
+		this.clearForm();
+	}
+
 	handleChange(event) {
 		let value = event.value;
 		if (event.name === 'studentName') {
@@ -106,6 +102,14 @@ class AddStudent extends Component {
 			}
 
 			this.setState({grade: value})
+		}
+	}
+
+	renderButtons() {
+		if (!this.state.updateClicked) {
+			return <button type="submit" className="btn btn-success">Add</button>;
+		} else {
+			return <button type="submit" className="btn btn-success">Update</button>
 		}
 	}
 
@@ -127,16 +131,16 @@ class AddStudent extends Component {
 			course: student.course,
 			grade: student.grade,
 			id: student.id,
-			newStudent: false,
 			error: '',
-			created: student.created
+			created: student.created,
+			updateClicked: true
 		});
 	}
 
 	updateStudent() {
 		firebase.database().ref(`Students/${this.state.id}`).update(this.state);
+		this.props.updatedStudent();
 		this.clearForm();
-		this.cancelUpdate();
 	}
 
 	// Render Method
@@ -188,10 +192,10 @@ class AddStudent extends Component {
 					</div>
 
 					{this.renderError()}
-					<button type="submit" className="btn btn-success">Add</button>
+					{this.renderButtons()}
 					<button
 						type="button"
-						className="btn btn-default"
+						className="btn btn-warning pull-right"
 						onClick={(e) => this.handleCancelClicked(e)}>Cancel</button>
 				</form>
 			</div>
