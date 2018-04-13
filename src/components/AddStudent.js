@@ -54,10 +54,6 @@ class AddStudent extends Component {
 		e.preventDefault();
 		const form = e.target;
 		const buttonClicked = form.querySelector('button');
-		if (buttonClicked.innerText === 'Update') {
-			this.updateStudent();
-			return;
-		}
 		
 		if (this.state.name === '') {
 			this.setState({error: 'Please enter a name'});
@@ -71,8 +67,13 @@ class AddStudent extends Component {
 			this.setState({error: 'Please enter a grade between 0 and 100'});
 			return;
 		}
-		this.props.addStudent(this.state);
 
+		if (buttonClicked.innerText === 'Update') {
+			this.updateStudent();
+		} else {
+			this.props.addStudent(this.state);
+		}
+		
 		this.setState({
 			name: '',
 			course: '',
